@@ -256,6 +256,7 @@ static int xerrorstart(Display *dpy, XErrorEvent *ee);
 static void zoom(const Arg *arg);
 
 /* variables */
+static Client *prevzoom = NULL;
 static const char broken[] = "broken";
 static char stext[256];
 static int screen;
@@ -2219,14 +2220,36 @@ xerrorstart(Display *dpy, XErrorEvent *ee) {
 void
 zoom(const Arg *arg) {
 	Client *c = selmon->sel;
+	Client *at, *tmp;
 
 	if(!selmon->lt[selmon->sellt]->arrange
 	|| (selmon->sel && selmon->sel->isfloating))
 		return;
-	if(c == nexttiled(selmon->clients))
-		if(!c || !(c = nexttiled(c->next)))
-			return;
+	if(c == nexttiled(selmon->clients)) {
+		for(tmp = selmon->clients; tmp && tmp != prevzoom; tmp = tmp->next) ;
+		if(tmp != prevzoom)
+			prevzoom = NULL;
+		if(!c || !(c = nexttiled(prevzoom))) {
+			c = selmon->sel;
+			if(!c || !(c = nexttiled(c->next)))
+				return;
+		}
+	}
+	for(at = selmon->clients; at && at->next && at != c && at->next != c; at = nexttiled(at->next)) ;
 	pop(c);
+	/* swap windows instead of pushing the previous one down */
+	if(at && at != c) {
+		/* store c's next neighbor - this window needs to be moved away */
+		tmp = prevzoom = c->next;
+		if(c->next != at) {
+			/* detach c's neighbor from the list of windows */
+			c->next = tmp->next;
+			/* attach tmp after c's previous neighbor */
+			tmp->next = at->next;
+			at->next = tmp;
+			arrange(c->mon);
+		}
+	}
 }
 
 int
