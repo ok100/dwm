@@ -765,13 +765,7 @@ drawbar(Monitor *m) {
 		dc.x = m->ww;
 	if((dc.w = dc.x - x) > bh) {
 		dc.x = x;
-		if(m->sel) {
-			col = m == selmon ? dc.colors[1] : dc.colors[0];
-			drawtext(m->sel->name, col, True);
-			drawsquare(m->sel->isfixed, m->sel->isfloating, col);
-		}
-		else
-			drawtext(NULL, dc.colors[0], False);
+		drawtext(NULL, dc.colors[0], False);
 	}
 	XCopyArea(dpy, dc.drawable, m->barwin, dc.gc, 0, 0, m->ww, bh, 0, 0);
 	XSync(dpy, False);
