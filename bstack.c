@@ -20,11 +20,8 @@ bstack(Monitor *m) {
 	for(i = mx = 0, tx = m->wx, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++) {
 		if(i < m->nmaster) {
 			w = (m->ww - mx) / (MIN(n, m->nmaster) - i);
-			if(n == 1)
-				resize(c, m->wx - c->bw, m->wy, m->ww, m->wh, False);
-			else
-				resize(c, m->wx + mx - c->bw, m->wy, w, mh - c->bw, False);
-			mx += WIDTH(c) - c->bw;
+			resize(c, m->wx + mx, m->wy, w - (2 * c->bw), mh - (2 * c->bw), False);
+			mx += WIDTH(c);
 		} 
 		else {
 			h = m->wh - mh;

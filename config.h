@@ -5,7 +5,7 @@
 #include "restart.c"
 
 /* appearance */
-static const char font[] = "-*-tamsyn-medium-r-*-*-14-*-*-*-*-*-*-*";
+static const char font[] = "-*-termsyn-medium-r-*-*-13-*-*-*-*-*-*-*";
 
 #define NUMCOLORS 3
 static const char colors[NUMCOLORS][ColLast][8] = {
@@ -77,7 +77,7 @@ static const char *dmenucmd[] = { "dmenu_run", "-fn", font, "-nb", colors[0][Col
 static const char *termcmd[]  = { "urxvtc", NULL };
 static const char *dcalcmd[]  = { "dcal.sh", "-fn", font, "-bg", colors[0][ColBG], "-bd", colors[1][ColBorder],
                                   "-cf", colors[0][ColFG], "-of", colors[0][ColBorder],
-								  "-tf", colors[1][ColFG], "-hf", colors[2][ColFG], "-y", "16", NULL };
+								  "-tf", colors[1][ColFG], "-hf", colors[2][ColFG], "-y", "15", NULL };
 
 static Key keys[] = {
 	/* modifier          key                       function        argument */
