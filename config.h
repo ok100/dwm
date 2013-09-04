@@ -5,23 +5,23 @@
 #include "restart.c"
 
 /* appearance */
-static const char font[] = "-*-termsyn-medium-r-*-*-13-*-*-*-*-*-*-*";
+static const char font[] = "-*-tamsyn-medium-r-*-*-14-*-*-*-*-*-*-*";
 
 #define NUMCOLORS 3
 static const char colors[NUMCOLORS][ColLast][8] = {
 	/* border     fg          bg */
-	{ "#373B41", "#707880", "#1D1F21" },        /* 01 = normal */
-	{ "#707880", "#C5C8C6", "#1D1F21" },        /* 02 = selected */
-	{ "#A54242", "#CC6666", "#1D1F21" },        /* 03 = urgent/warning */
+	{ "#262626", "#757978", "#1C1C1C" },        /* 01 = normal */
+	{ "#757978", "#C1C4BC", "#1C1C1C" },        /* 02 = selected */
+	{ "#A04363", "#A04363", "#1C1C1C" },        /* 03 = urgent/warning */
 };
 
-static const unsigned int borderpx  = 1;        /* border pixel of windows */
+static const unsigned int borderpx  = 2;        /* border pixel of windows */
 static const unsigned int snap      = 16;       /* snap pixel */
 static const Bool showbar           = True;     /* False means no bar */
 static const Bool topbar            = True;     /* False means bottom bar */
 
 /* tagging */
-static const char *tags[] = { "base", "web", "term", "work", "media", "irc" };
+static const char *tags[] = { "base", "web", "term", "docs", "media", "mail" };
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -31,15 +31,11 @@ static const Rule rules[] = {
 	/* class               instance    title           tags mask   isfloating   iscentred   monitor */
     {  NULL,               NULL,      "wget",          1 << 0,      False,       True,       -1 },
 	{ "Gimp",              NULL,       NULL,           1 << 0,      False,       True,       -1 },
-    { "Skype",             NULL,       NULL,           1 << 0,      True,        False,      -1 },
-    { "Xsane",             NULL,       NULL,           1 << 0,      True,        False,      -1 },
 	{ "Dwb",               NULL,       NULL,           1 << 1,      False,       True,       -1 },
 	{ "Firefox",           NULL,       NULL,           1 << 1,      False,       True,       -1 },
-	{  NULL,               NULL,      "tmux-netbook",  1 << 2,      False,       True,       -1 },
     {  NULL,               NULL,      "tmux-music",    1 << 4,      False,       True,       -1 },
     { "Lingot",            NULL,       NULL,           1 << 4,      True,        True,       -1 },
 	{  NULL,               NULL,      "tmux-irc",      1 << 5,      False,       True,       -1 },
-    { "GuitarPro",         NULL,       NULL,           1 << 5,      False,       True,       -1 },
 	{ "Lxappearance",      NULL,       NULL,           0,           True,        True,       -1 },
 	{ "Qalculate",         NULL,       NULL,           0,           True,        True,       -1 },
 	{ "Stardict",          NULL,       NULL,           0,           True,        True,       -1 },
