@@ -21,7 +21,7 @@ static const Bool showbar           = True;     /* False means no bar */
 static const Bool topbar            = True;     /* False means bottom bar */
 
 /* tagging */
-static const char *tags[] = { "base", "web", "term", "docs", "media", "mail" };
+static const char *tags[] = { "base", "web", "term", "docs", "media", "mail", "dev" };
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -33,14 +33,19 @@ static const Rule rules[] = {
 	{ "Gimp",              NULL,       NULL,           1 << 0,      False,       True,       -1 },
 	{ "Dwb",               NULL,       NULL,           1 << 1,      False,       True,       -1 },
 	{ "Firefox",           NULL,       NULL,           1 << 1,      False,       True,       -1 },
+    {  NULL,               NULL,      "ranger",        1 << 2,      False,       True,       -1 },
     {  NULL,               NULL,      "tmux-music",    1 << 4,      False,       True,       -1 },
     { "Lingot",            NULL,       NULL,           1 << 4,      True,        True,       -1 },
+	{  NULL,               NULL,      "mutt",          1 << 5,      False,       True,       -1 },
 	{  NULL,               NULL,      "tmux-irc",      1 << 5,      False,       True,       -1 },
+    { "Eclipse",           NULL,       NULL,           1 << 6,      False,       True,       -1 },
+    { "Java",              NULL,       NULL,           1 << 6,      True,        True,       -1 },
 	{ "Lxappearance",      NULL,       NULL,           0,           True,        True,       -1 },
 	{ "Qalculate",         NULL,       NULL,           0,           True,        True,       -1 },
 	{ "Stardict",          NULL,       NULL,           0,           True,        True,       -1 },
-	{ "mplayer2",          NULL,       NULL,           0,           True,        True,       -1 },
+	{ "mpv",               NULL,       NULL,           0,           True,        True,       -1 },
     { "Qpass",             NULL,       NULL,           0,           True,        True,       -1 },
+    { "Xdialog",           NULL,       NULL,           0,           True,        True,       -1 },
 };
 
 /* layout(s) */
@@ -68,67 +73,71 @@ static const Layout layouts[] = {
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
 /* commands */
-static const char *dmenucmd[] = { "dmenu_run", "-fn", font, "-nb", colors[0][ColBG], "-nf", colors[0][ColFG],
-                                  "-sb", colors[1][ColBG], "-sf", colors[1][ColFG], NULL };
-static const char *termcmd[]  = { "urxvtc", NULL };
-static const char *dcalcmd[]  = { "dcal.sh", "-fn", font, "-bg", colors[0][ColBG], "-bd", colors[1][ColBorder],
-                                  "-cf", colors[0][ColFG], "-of", colors[0][ColBorder],
-								  "-tf", colors[1][ColFG], "-hf", colors[2][ColFG], "-y", "15", NULL };
+static const char *dmenucmd[]  = { "dmenu_run", "-fn", font, "-nb", colors[0][ColBG], "-nf", colors[0][ColFG],
+                                   "-sb", colors[1][ColBG], "-sf", colors[1][ColFG], "-i", NULL };
+static const char *findercmd[] = { "finder", "-fn", font, "-nb", colors[0][ColBG], "-nf", colors[0][ColFG],
+                                   "-sb", colors[1][ColBG], "-sf", colors[1][ColFG], "-i", NULL };
+static const char *termcmd[]   = { "urxvtc", NULL };
+static const char *dcalcmd[]   = { "dcal.sh", "-fn", font, "-bg", colors[0][ColBG], "-bd", colors[1][ColBorder],
+                                   "-cf", colors[0][ColFG], "-of", colors[0][ColBorder],
+								   "-tf", colors[1][ColFG], "-hf", colors[2][ColFG], "-y", "15", NULL };
 
 static Key keys[] = {
-	/* modifier          key                       function        argument */
-	{ Mod4Mask,          XK_b,                     spawn,          SHCMD("dwb") },
-	{ Mod4Mask,          XK_c,                     spawn,          SHCMD("lolictrl") },
-	{ Mod4Mask,          XK_s,                     spawn,          SHCMD("lolictrl -spc") },
-	{ Mod4Mask,          XK_d,                     spawn,          SHCMD("stardict") },
-	{ Mod4Mask,          XK_i,                     spawn,          SHCMD("urxvtc -title tmux-irc -e ssh ok100@shell.bshellz.net -t tmux attach") },
-	{ Mod4Mask,          XK_m,                     spawn,          SHCMD("urxvtc -title tmux-music -e music") },
-	{ Mod4Mask,          XK_t,                     spawn,          SHCMD("urxvtc -title tmux-netbook -e tmux attach") },
-	{ Mod4Mask,          XK_h,                     spawn,          SHCMD("qpass") },
-	{ Mod4Mask,          XK_w,                     spawn,          SHCMD("sudo connman_dmenu") },
-	{ Mod4Mask,          XK_F2,                    spawn,          SHCMD("connmanctl disable wifi") },
-	{ 0,                 XF86XK_Launch1,           spawn,          SHCMD("xset dpms force off") },
-	{ 0,                 XF86XK_PowerOff,          spawn,          SHCMD("dmenu-powerbutton") },
-	{ 0,                 XF86XK_AudioLowerVolume,  spawn,          SHCMD("volume 2-") },
-	{ 0,                 XF86XK_AudioMute,         spawn,          SHCMD("volume toggle") },
-	{ 0,                 XF86XK_AudioRaiseVolume,  spawn,          SHCMD("volume 2+") },
-	{ 0,                 XF86XK_ScreenSaver,       spawn,          SHCMD("mpc toggle") },
-	{ 0,                 XF86XK_Launch2,           spawn,          SHCMD("mpc prev") },
-	{ 0,                 XF86XK_Launch3,           spawn,          SHCMD("mpc next") },
-	{ 0,                 XK_Menu,                  spawn,          {.v = dmenucmd } },
-	{ MODKEY|ShiftMask,  XK_Return,                spawn,          {.v = termcmd } },
-	{ MODKEY|ShiftMask,  XK_r,                     restart,        {0} },
-	{ MODKEY|ShiftMask,  XK_b,                     togglebar,      {0} },
-	{ MODKEY,            XK_Down,                  focusstack,     {.i = +1 } },
-	{ MODKEY,            XK_Up,                    focusstack,     {.i = -1 } },
-	{ MODKEY|ShiftMask,  XK_Left,                  incnmaster,     {.i = +1 } },
-	{ MODKEY|ShiftMask,  XK_Right,                 incnmaster,     {.i = -1 } },
-	{ MODKEY|ShiftMask,  XK_Up,                    pushup,         {0} },
-	{ MODKEY|ShiftMask,  XK_Down,                  pushdown,       {0} },
-	{ MODKEY,            XK_Left,                  setmfact,       {.f = -0.01} },
-	{ MODKEY,            XK_Right,                 setmfact,       {.f = +0.01} },
-	{ MODKEY,            XK_Return,                zoom,           {0} },
-	{ MODKEY,            XK_Tab,                   view,           {0} },
-	{ MODKEY|ShiftMask,  XK_c,                     killclient,     {0} },
-	{ MODKEY,            XK_t,                     setlayout,      {.v = &layouts[0]} },
-	{ MODKEY,            XK_m,                     setlayout,      {.v = &layouts[1]} },
-	{ MODKEY,            XK_b,                     setlayout,      {.v = &layouts[2]} },
-	{ MODKEY,            XK_f,                     setlayout,      {.v = &layouts[3]} },
-	{ MODKEY,            XK_space,                 setlayout,      {0} },
-	{ MODKEY|ShiftMask,  XK_space,                 togglefloating, {0} },
-	{ MODKEY,            XK_eacute,                view,           {.ui = ~0 } },
-	{ MODKEY|ShiftMask,  XK_eacute,                tag,            {.ui = ~0 } },
-	{ MODKEY,            XK_comma,                 focusmon,       {.i = -1 } },
-	{ MODKEY,            XK_period,                focusmon,       {.i = +1 } },
-	{ MODKEY|ShiftMask,  XK_comma,                 tagmon,         {.i = -1 } },
-	{ MODKEY|ShiftMask,  XK_period,                tagmon,         {.i = +1 } },
-	TAGKEYS(             XK_plus,                                  0)
-	TAGKEYS(             XK_ecaron,                                1)
-	TAGKEYS(             XK_scaron,                                2)
-	TAGKEYS(             XK_ccaron,                                3)
-	TAGKEYS(             XK_rcaron,                                4)
-	TAGKEYS(             XK_zcaron,                                5)
-	{ MODKEY|ShiftMask,  XK_q,                     quit,           {0} },
+	/* modifier            key                       function        argument */
+	{ Mod4Mask,            XK_b,                     spawn,          SHCMD("dwb") },
+	{ Mod4Mask,            XK_c,                     spawn,          SHCMD("lolictrl") },
+	{ Mod4Mask,            XK_s,                     spawn,          SHCMD("lolictrl -spc") },
+	{ Mod4Mask,            XK_d,                     spawn,          SHCMD("stardict") },
+	{ Mod4Mask,            XK_i,                     spawn,          SHCMD("urxvtc -title tmux-irc -e ssh ok100@shell.bshellz.net -t tmux attach") },
+	{ Mod4Mask,            XK_m,                     spawn,          SHCMD("urxvtc -title tmux-music -e music") },
+	{ Mod4Mask,            XK_r,                     spawn,          SHCMD("urxvtc -title ranger -e ranger") },
+	{ Mod4Mask,            XK_h,                     spawn,          SHCMD("qpass") },
+	{ Mod4Mask,            XK_w,                     spawn,          SHCMD("sudo connman_dmenu") },
+	{ Mod4Mask,            XK_f,                     spawn,          {.v = findercmd } },
+	{ Mod4Mask,            XK_F2,                    spawn,          SHCMD("connmanctl disable wifi") },
+	{ 0,                   XF86XK_PowerOff,          spawn,          SHCMD("dmenu-powerbutton") },
+	{ 0,                   XF86XK_AudioLowerVolume,  spawn,          SHCMD("volume down") },
+	{ 0,                   XF86XK_AudioMute,         spawn,          SHCMD("volume toggle") },
+	{ 0,                   XF86XK_AudioRaiseVolume,  spawn,          SHCMD("volume up") },
+	{ 0,                   XF86XK_AudioPlay,         spawn,          SHCMD("mpc toggle") },
+	{ 0,                   XF86XK_AudioNext,         spawn,          SHCMD("mpc next") },
+	{ 0,                   XF86XK_AudioPrev,         spawn,          SHCMD("mpc prev") },
+	{ 0,                   XF86XK_AudioStop,         spawn,          SHCMD("mpc stop") },
+	{ 0,                   XK_Menu,                  spawn,          {.v = dmenucmd } },
+	{ MODKEY|ShiftMask,    XK_Return,                spawn,          {.v = termcmd } },
+	{ Mod4Mask|ShiftMask,  XK_r,                     restart,        {0} },
+	{ MODKEY|ShiftMask,    XK_b,                     togglebar,      {0} },
+	{ MODKEY,              XK_Down,                  focusstack,     {.i = +1 } },
+	{ MODKEY,              XK_Up,                    focusstack,     {.i = -1 } },
+	{ MODKEY|ShiftMask,    XK_Left,                  incnmaster,     {.i = +1 } },
+	{ MODKEY|ShiftMask,    XK_Right,                 incnmaster,     {.i = -1 } },
+	{ MODKEY|ShiftMask,    XK_Up,                    pushup,         {0} },
+	{ MODKEY|ShiftMask,    XK_Down,                  pushdown,       {0} },
+	{ MODKEY,              XK_Left,                  setmfact,       {.f = -0.01} },
+	{ MODKEY,              XK_Right,                 setmfact,       {.f = +0.01} },
+	{ MODKEY,              XK_Return,                zoom,           {0} },
+	{ MODKEY,              XK_Tab,                   view,           {0} },
+	{ MODKEY|ShiftMask,    XK_c,                     killclient,     {0} },
+	{ MODKEY,              XK_t,                     setlayout,      {.v = &layouts[0]} },
+	{ MODKEY,              XK_m,                     setlayout,      {.v = &layouts[1]} },
+	{ MODKEY,              XK_b,                     setlayout,      {.v = &layouts[2]} },
+	{ MODKEY,              XK_f,                     setlayout,      {.v = &layouts[3]} },
+	{ MODKEY,              XK_space,                 setlayout,      {0} },
+	{ MODKEY|ShiftMask,    XK_space,                 togglefloating, {0} },
+	{ MODKEY,              XK_eacute,                view,           {.ui = ~0 } },
+	{ MODKEY|ShiftMask,    XK_eacute,                tag,            {.ui = ~0 } },
+	{ MODKEY,              XK_comma,                 focusmon,       {.i = -1 } },
+	{ MODKEY,              XK_period,                focusmon,       {.i = +1 } },
+	{ MODKEY|ShiftMask,    XK_comma,                 tagmon,         {.i = -1 } },
+	{ MODKEY|ShiftMask,    XK_period,                tagmon,         {.i = +1 } },
+	TAGKEYS(               XK_plus,                                  0)
+	TAGKEYS(               XK_ecaron,                                1)
+	TAGKEYS(               XK_scaron,                                2)
+	TAGKEYS(               XK_ccaron,                                3)
+	TAGKEYS(               XK_rcaron,                                4)
+	TAGKEYS(               XK_zcaron,                                5)
+	TAGKEYS(               XK_yacute,                                6)
+	{ MODKEY|ShiftMask,    XK_q,                     quit,           {0} },
 };
 
 /* button definitions */
