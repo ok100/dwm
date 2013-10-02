@@ -21,7 +21,7 @@ static const Bool showbar           = True;     /* False means no bar */
 static const Bool topbar            = True;     /* False means bottom bar */
 
 /* tagging */
-static const char *tags[] = { "base", "web", "term", "docs", "media", "mail", "dev" };
+static const char *tags[] = { "1:base", "2:web", "3:term", "4:docs", "5:media", "6:mail", "7:dev" };
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -36,6 +36,7 @@ static const Rule rules[] = {
     {  NULL,               NULL,      "ranger",        1 << 2,      False,       True,       -1 },
     {  NULL,               NULL,      "tmux-music",    1 << 4,      False,       True,       -1 },
     { "Lingot",            NULL,       NULL,           1 << 4,      True,        True,       -1 },
+	{  NULL,               NULL,      "irc",           1 << 5,      False,       True,       -1 },
 	{  NULL,               NULL,      "mutt",          1 << 5,      False,       True,       -1 },
 	{  NULL,               NULL,      "tmux-irc",      1 << 5,      False,       True,       -1 },
     { "Eclipse",           NULL,       NULL,           1 << 6,      False,       True,       -1 },
@@ -73,14 +74,15 @@ static const Layout layouts[] = {
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
 /* commands */
-static const char *dmenucmd[]  = { "dmenu_run", "-fn", font, "-nb", colors[0][ColBG], "-nf", colors[0][ColFG],
-                                   "-sb", colors[1][ColBG], "-sf", colors[1][ColFG], "-i", NULL };
-static const char *findercmd[] = { "finder", "-fn", font, "-nb", colors[0][ColBG], "-nf", colors[0][ColFG],
-                                   "-sb", colors[1][ColBG], "-sf", colors[1][ColFG], "-i", NULL };
-static const char *termcmd[]   = { "urxvtc", NULL };
-static const char *dcalcmd[]   = { "dcal.sh", "-fn", font, "-bg", colors[0][ColBG], "-bd", colors[1][ColBorder],
-                                   "-cf", colors[0][ColFG], "-of", colors[0][ColBorder],
-								   "-tf", colors[1][ColFG], "-hf", colors[2][ColFG], "-y", "15", NULL };
+static const char *dmenucmd[]   = { "dmenu_run", "-fn", font, "-nb", colors[0][ColBG], "-nf", colors[0][ColFG],
+                                    "-sb", colors[1][ColBG], "-sf", colors[1][ColFG], "-i", NULL };
+static const char *findercmd[]  = { "finder", "-fn", font, "-nb", colors[0][ColBG], "-nf", colors[0][ColFG],
+                                    "-sb", colors[1][ColBG], "-sf", colors[1][ColFG], "-i", NULL };
+static const char *termcmd[]    = { "urxvtc", NULL };
+static const char *dcalcmd[]    = { "dcal.sh", "-fn", font, "-bg", colors[0][ColBG], "-bd", colors[1][ColBorder],
+                                    "-cf", colors[0][ColFG], "-of", colors[0][ColBorder],
+							 	    "-tf", colors[1][ColFG], "-hf", colors[2][ColFG], "-y", "15", NULL };
+static const char *connmancmd[] = { "sudo", "connman_dmenu", NULL };
 
 static Key keys[] = {
 	/* modifier            key                       function        argument */
@@ -92,10 +94,10 @@ static Key keys[] = {
 	{ Mod4Mask,            XK_m,                     spawn,          SHCMD("urxvtc -title tmux-music -e music") },
 	{ Mod4Mask,            XK_r,                     spawn,          SHCMD("urxvtc -title ranger -e ranger") },
 	{ Mod4Mask,            XK_h,                     spawn,          SHCMD("qpass") },
-	{ Mod4Mask,            XK_w,                     spawn,          SHCMD("sudo connman_dmenu") },
+	{ Mod4Mask,            XK_w,                     spawn,          {.v = connmancmd } },
 	{ Mod4Mask,            XK_f,                     spawn,          {.v = findercmd } },
 	{ Mod4Mask,            XK_F2,                    spawn,          SHCMD("connmanctl disable wifi") },
-	{ 0,                   XF86XK_PowerOff,          spawn,          SHCMD("dmenu-powerbutton") },
+	{ 0,                   XF86XK_PowerOff,          spawn,          SHCMD("xautolock -locknow") },
 	{ 0,                   XF86XK_AudioLowerVolume,  spawn,          SHCMD("volume down") },
 	{ 0,                   XF86XK_AudioMute,         spawn,          SHCMD("volume toggle") },
 	{ 0,                   XF86XK_AudioRaiseVolume,  spawn,          SHCMD("volume up") },
