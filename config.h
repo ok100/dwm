@@ -21,7 +21,7 @@ static const Bool showbar           = True;     /* False means no bar */
 static const Bool topbar            = True;     /* False means bottom bar */
 
 /* tagging */
-static const char *tags[] = { "1:base", "2:web", "3:term", "4:docs", "5:media", "6:mail", "7:dev" };
+static const char *tags[] = { "1:web", "2:term", "3:media", "4:mail", "5:other", "6:other" };
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -29,18 +29,16 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class               instance    title           tags mask   isfloating   iscentred   monitor */
-    {  NULL,               NULL,      "wget",          1 << 0,      False,       True,       -1 },
-	{ "Gimp",              NULL,       NULL,           1 << 0,      False,       True,       -1 },
-	{ "Dwb",               NULL,       NULL,           1 << 1,      False,       True,       -1 },
-	{ "Firefox",           NULL,       NULL,           1 << 1,      False,       True,       -1 },
-    {  NULL,               NULL,      "ranger",        1 << 2,      False,       True,       -1 },
-    {  NULL,               NULL,      "tmux-music",    1 << 4,      False,       True,       -1 },
-    { "Lingot",            NULL,       NULL,           1 << 4,      True,        True,       -1 },
-	{  NULL,               NULL,      "irc",           1 << 5,      False,       True,       -1 },
-	{  NULL,               NULL,      "mutt",          1 << 5,      False,       True,       -1 },
-	{  NULL,               NULL,      "tmux-irc",      1 << 5,      False,       True,       -1 },
-    { "Eclipse",           NULL,       NULL,           1 << 6,      False,       True,       -1 },
-    { "Java",              NULL,       NULL,           1 << 6,      True,        True,       -1 },
+	{ "Dwb",               NULL,       NULL,           1 << 0,      False,       True,       -1 },
+	{ "Firefox",           NULL,       NULL,           1 << 0,      False,       True,       -1 },
+    {  NULL,               NULL,      "ranger",        1 << 1,      False,       True,       -1 },
+    {  NULL,               NULL,      "tmux-music",    1 << 2,      False,       True,       -1 },
+    { "Lingot",            NULL,       NULL,           1 << 2,      True,        True,       -1 },
+	{  NULL,               NULL,      "irc",           1 << 3,      False,       True,       -1 },
+	{  NULL,               NULL,      "mutt",          1 << 3,      False,       True,       -1 },
+    {  NULL,               NULL,      "wget",          1 << 5,      False,       True,       -1 },
+	{ "Gnuplot",           NULL,       NULL,           0,           True,        True,       -1 },
+    { "Java",              NULL,       NULL,           0,           True,        True,       -1 },
 	{ "Lxappearance",      NULL,       NULL,           0,           True,        True,       -1 },
 	{ "Qalculate",         NULL,       NULL,           0,           True,        True,       -1 },
 	{ "Stardict",          NULL,       NULL,           0,           True,        True,       -1 },
@@ -138,7 +136,6 @@ static Key keys[] = {
 	TAGKEYS(               XK_ccaron,                                3)
 	TAGKEYS(               XK_rcaron,                                4)
 	TAGKEYS(               XK_zcaron,                                5)
-	TAGKEYS(               XK_yacute,                                6)
 	{ MODKEY|ShiftMask,    XK_q,                     quit,           {0} },
 };
 
