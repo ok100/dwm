@@ -5,7 +5,6 @@ dwm is an extremely fast, small, and dynamic window manager for X.
 This is my personal fork with several patches:
 - attachabove
 - centred-floating
-- no-title
 - save-floats
 - single-window-no-border
 - statuscolors
