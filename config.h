@@ -5,7 +5,7 @@
 #include "restart.c"
 
 /* appearance */
-static const char font[] = "-*-tamsyn-medium-r-*-*-14-*-*-*-*-*-*-*";
+static const char font[] = "Dejavu Sans Mono-9:normal";
 
 #define NUMCOLORS 3
 static const char colors[NUMCOLORS][ColLast][8] = {

@@ -3,6 +3,7 @@ dwm - dynamic window manager
 dwm is an extremely fast, small, and dynamic window manager for X.
 
 This is my personal fork with several patches:
+- xft
 - attachabove
 - centred-floating
 - save-floats
